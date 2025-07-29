@@ -1,4 +1,4 @@
-name: deploy_init
+name: deploy init
 run-name: deploy init - ${{ github.event.inputs.terraform_action }}
 
 on:
@@ -19,6 +19,10 @@ defaults:
   run:
     shell: bash
     working-directory: ./init
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   plan:
@@ -42,7 +46,7 @@ jobs:
         if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
 
   get-approval:
-    name: "Get approval"
+    name: "get approval"
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.terraform_action == 'apply' || github.event.inputs.terraform_action == 'destroy' }}
     environment: approval_required
