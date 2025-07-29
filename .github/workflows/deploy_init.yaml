@@ -1,0 +1,75 @@
+name: deploy_init
+run-name: deploy init - ${{ github.event.inputs.terraform_action }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_action:
+        description: 'Select Terraform action'
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - plan destroy
+          - apply
+          - destroy
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./init
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_wrappers: false
+      - run: terraform --version
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_ARN }}
+          aws-region: us-east-2
+      - run: terraform init
+      - run: terraform validate
+      - run: terraform plan
+        if: ${{ github.event.inputs.terraform_action == 'plan' || github.event.inputs.terraform_action == 'apply' }}
+      - run: terraform plan --destroy
+        if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
+
+  get-approval:
+    name: "Get approval"
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.terraform_action == 'apply' || github.event.inputs.terraform_action == 'destroy' }}
+    environment: approval_required
+    needs: [plan]
+    steps:
+      - name: Approval requested
+        run: echo "Approval provided.  Job will continue."
+
+  apply:
+    name: ${{ github.event.inputs.terraform_action }}
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.terraform_action == 'apply' || github.event.inputs.terraform_action == 'destroy' }}
+    needs: [plan, get-approval]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_wrappers: false
+      - run: terraform --version
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_ARN }}
+          aws-region: us-east-2
+      - run: terraform init
+      - run: terraform validate
+      - run: terraform apply --auto-approve
+        if: ${{ github.event.inputs.terraform_action == 'apply' }}
+      - run: terraform destroy --auto-approve
+        if: ${{ github.event.inputs.terraform_action == 'destroy' }}
