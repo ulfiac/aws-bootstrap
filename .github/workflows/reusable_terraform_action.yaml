@@ -1,0 +1,42 @@
+name: reusable terraform action
+run-name: reusable terraform action - ${{ inputs.terraform_action }}
+
+on: 
+  workflow_call:
+    inputs:
+      terraform_action:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform_action:
+    name: terraform action - ${{ inputs.terraform_action }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./init
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_wrapper: false
+      - run: terraform --version
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_ARN }}
+          aws-region: us-east-2
+      - run: terraform init
+      - run: terraform validate
+      - run: terraform plan
+        if: ${{ inputs.terraform_action == 'plan' }}
+      - run: terraform plan -destroy
+        if: ${{ inputs.terraform_action == 'plan destroy' }}
+      - run: terraform apply -auto-approve
+        if: ${{ inputs.terraform_action == 'apply' }}
+      - run: terraform apply -destroy -auto-approve
+        if: ${{ inputs.terraform_action == 'destroy' }}
