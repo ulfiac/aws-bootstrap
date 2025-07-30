@@ -4,8 +4,86 @@ run-name: reusable terraform action - ${{ inputs.terraform_action }}
 on: 
   workflow_call:
     inputs:
+      dump_context:
+        required: false
+        type: boolean
+        default: false
       terraform_action:
         required: true
+        type: string
+      tf_log:
+        required: false
+        type: string
+        default: 'OFF'
+      tf_log_core:
+        required: false
+        type: string
+        default: 'OFF'
+      tf_log_provider:
+        required: false
+        type: string
+        default: 'OFF'
+      tf_log_path:
+        required: false
+        type: string
+        default: './terraform.log'
+  workflow_dispatch:
+    inputs:
+      terraform_action:
+        description: 'select terraform action'
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - plan destroy
+          - apply
+          - destroy
+      dump_context:
+        description: 'dump context'
+        required: false
+        default: 'false'
+        type: boolean
+      tf_log:
+        description: 'set TF_LOG level'
+        required: false
+        default: 'OFF'
+        type: string
+        options:
+          - OFF
+          - TRACE
+          - DEBUG
+          - INFO
+          - WARN
+          - ERROR
+      tf_log_core:
+        description: 'set TF_LOG_CORE level'
+        required: false
+        default: 'OFF'
+        type: string
+        options:
+          - OFF
+          - TRACE
+          - DEBUG
+          - INFO
+          - WARN
+          - ERROR
+      tf_log_provider:
+        description: 'set TF_LOG_PROVIDER level'
+        required: false
+        default: 'OFF'
+        type: string
+        options:
+          - OFF
+          - TRACE
+          - DEBUG
+          - INFO
+          - WARN
+          - ERROR
+      tf_log_path:
+        description: 'set TF_LOG_PATH'
+        required: false
+        default: './terraform.log'
         type: string
 
 permissions:
@@ -13,13 +91,55 @@ permissions:
   id-token: write
 
 jobs:
+  dump-context:
+    if: ${{ inputs.dump_context == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: dump context
+        if: ${{ inputs.dump_context == 'true' }}
+        run: |
+          echo "Dumping context..."
+          echo "env context: ${{ toJson(env) }}"
+          echo "github context: ${{ toJson(github) }}"
+          echo "inputs context: ${{ toJson(inputs) }}"
+          echo "job context: ${{ toJson(job) }}"
+          echo "jobs context: ${{ toJson(jobs) }}"
+          echo "matrix context: ${{ toJson(matrix) }}"
+          echo "needs context: ${{ toJson(needs) }}"
+          echo "runner context: ${{ toJson(runner) }}"
+          echo "secrets context: ${{ toJson(secrets) }}"
+          echo "steps context: ${{ toJson(steps) }}"
+          echo "strategy context: ${{ toJson(strategy) }}"
+          echo "vars context: ${{ toJson(vars) }}"
   terraform_action:
     name: terraform action - ${{ inputs.terraform_action }}
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./init
+    env:
+      TF_LOG: ${{ inputs.tf_log }}
+      TF_LOG_CORE: ${{ inputs.tf_log_core }}
+      TF_LOG_PROVIDER: ${{ inputs.tf_log_provider }}
+      TF_LOG_PATH: ${{ inputs.tf_log_path }}
     steps:
+      - name: dump context
+        if: ${{ inputs.dump_context == 'true' }}
+        run: |
+          echo "Dumping context..."
+          echo "env context: ${{ toJson(env) }}"
+          echo "github context: ${{ toJson(github) }}"
+          echo "inputs context: ${{ toJson(inputs) }}"
+          echo "job context: ${{ toJson(job) }}"
+          echo "jobs context: ${{ toJson(jobs) }}"
+          echo "matrix context: ${{ toJson(matrix) }}"
+          echo "needs context: ${{ toJson(needs) }}"
+          echo "runner context: ${{ toJson(runner) }}"
+          echo "secrets context: ${{ toJson(secrets) }}"
+          echo "steps context: ${{ toJson(steps) }}"
+          echo "vars context: ${{ toJson(vars) }}"
+      - uses: crazy-max/ghaction-dump-context@5355a8e5e6ac5a302e746a1c4b7747a0393863c8 # v2.3.0
+        if: ${{ inputs.dump_context == 'true' }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
