@@ -49,7 +49,7 @@ jobs:
           aws-region: us-east-2
       - name: dump context
         run: |
-          echo "Dumping context..."
+          echo 'Dumping context...'
           echo "env context: ${{ toJson(env) }}"
           echo "github context: ${{ toJson(github) }}"
       - run: terraform init
