@@ -7,10 +7,13 @@ on:
       terraform_action:
         required: true
         type: string
+      working_directory:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       terraform_action:
-        description: 'select terraform action'
+        description: 'terraform action'
         required: true
         default: 'plan'
         type: choice
@@ -19,6 +22,19 @@ on:
           - plan destroy
           - apply
           - destroy
+      working_directory:
+        description: 'working directory'
+        required: true
+        default: './init'
+        type: choice
+        options:
+          - ./init
+
+env:
+  TF_LOG: OFF
+  TF_LOG_CORE: OFF
+  TF_LOG_PROVIDER: OFF
+  TF_LOG_PATH: ./terraform.log
 
 permissions:
   contents: read
@@ -26,16 +42,11 @@ permissions:
 
 jobs:
   terraform_action:
-    name: terraform action - ${{ inputs.terraform_action }}
+    name: "tf action: ${{ inputs.terraform_action }} on ${{ inputs.working_directory }}"
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./init
-    env:
-      TF_LOG: OFF
-      TF_LOG_CORE: OFF
-      TF_LOG_PROVIDER: OFF
-      TF_LOG_PATH: ./terraform.log
+        working-directory: ${{ inputs.working_directory }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
@@ -49,9 +60,9 @@ jobs:
           aws-region: us-east-2
       - name: dump context
         run: |
-          echo 'Dumping context...'
-          echo "env context: ${{ toJson(env) }}"
-          echo "github context: ${{ toJson(github) }}"
+          echo -e "Dumping context...\n"
+          echo -e "env context:\n${{ toJson(env) }}\n"
+          echo -e "github context:\n${{ toJson(github) }}\n"
       - run: terraform init
       - run: terraform validate
       - run: terraform plan
