@@ -1,5 +1,5 @@
 name: deploy tf
-run-name: "deploy tf: ${{ github.event.inputs.terraform_action }} on ${{ github.event.inputs.working_directory }}"
+run-name: deploy tf on ${{ github.event.inputs.working_directory }} - ${{ github.event.inputs.terraform_action }}
 
 on:
   workflow_dispatch:
