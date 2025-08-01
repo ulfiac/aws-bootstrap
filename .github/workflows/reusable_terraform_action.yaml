@@ -1,5 +1,5 @@
-name: reusable terraform action
-run-name: "reusable terraform action: ${{ inputs.terraform_action }} on ${{ inputs.working_directory }}"
+name: reusable tf action
+run-name: reusable tf action on ${{ inputs.working_directory }} - ${{ inputs.terraform_action }}
 
 on: 
   workflow_call:
@@ -42,7 +42,7 @@ permissions:
 
 jobs:
   terraform_action:
-    name: "tf action: ${{ inputs.terraform_action }} on ${{ inputs.working_directory }}"
+    name: "tf action on ${{ inputs.working_directory }} - ${{ inputs.terraform_action }}"
     runs-on: ubuntu-latest
     defaults:
       run:
