@@ -1,5 +1,5 @@
-name: deploy init
-run-name: deploy init - ${{ github.event.inputs.terraform_action }}
+name: deploy tf
+run-name: "deploy tf: ${{ github.event.inputs.terraform_action }} on ${{ github.event.inputs.working_directory }}"
 
 on:
   workflow_dispatch:
@@ -14,6 +14,13 @@ on:
           - plan destroy
           - apply
           - destroy
+      working_directory:
+        description: 'working directory'
+        required: true
+        default: './init'
+        type: choice
+        options:
+          - ./init
 
 permissions:
   contents: read
@@ -25,7 +32,7 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'plan' || github.event.inputs.terraform_action == 'apply' }}
     with:
       terraform_action: plan
-      working_directory: ./init
+      working_directory: ${{ github.event.inputs.working_directory }}
     secrets: inherit
 
   plan-destroy:
@@ -33,7 +40,7 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
     with:
       terraform_action: plan destroy
-      working_directory: ./init
+      working_directory: ${{ github.event.inputs.working_directory }}
     secrets: inherit
 
   get-approval-for-apply:
@@ -60,7 +67,7 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     with:
       terraform_action: apply
-      working_directory: ./init
+      working_directory: ${{ github.event.inputs.working_directory }}
     secrets: inherit
 
   destroy:
@@ -69,5 +76,5 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     with:
       terraform_action: destroy
-      working_directory: ./init
+      working_directory: ${{ github.event.inputs.working_directory }}
     secrets: inherit

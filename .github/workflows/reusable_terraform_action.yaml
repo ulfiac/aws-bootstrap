@@ -1,5 +1,5 @@
 name: reusable terraform action
-run-name: reusable terraform action - ${{ inputs.terraform_action }}
+run-name: "reusable terraform action: ${{ inputs.terraform_action }} on ${{ inputs.working_directory }}"
 
 on: 
   workflow_call:
