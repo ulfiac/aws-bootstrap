@@ -4,7 +4,7 @@ provider "aws" {
   default_tags {
     tags = {
       created_by = "terraform"
-      project    = "ulfiac bootstrap"
+      project    = "ulfiac root layer"
     }
   }
 }

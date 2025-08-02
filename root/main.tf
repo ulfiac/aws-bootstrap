@@ -7,9 +7,4 @@ data "aws_kms_key" "aws_s3_key" {
 locals {
   bucket_name     = "ulfiac-terraform-state"
   role_name_admin = "ulfiac-oidc-gha-admin"
-
-  import_oidc_gha = var.perform_import ? {
-    "oidc_gha" = "arn:aws:iam::976369349927:oidc-provider/token.actions.githubusercontent.com"
-  } : {}
-
 }
