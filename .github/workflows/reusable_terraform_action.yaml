@@ -13,7 +13,7 @@ on:
       import:
         required: false
         type: boolean
-        default: true
+        default: false
   workflow_dispatch:
     inputs:
       terraform_action:
@@ -33,10 +33,11 @@ on:
         type: choice
         options:
           - ./init
+          - ./root
       import:
         description: 'import'
         required: false
-        default: true
+        default: false
         type: boolean
 
 env:
@@ -44,7 +45,6 @@ env:
   TF_LOG_CORE: OFF
   TF_LOG_PROVIDER: OFF
   TF_LOG_PATH: ./terraform.log
-  TF_VAR_import: ${{ inputs.import }}
 
 permissions:
   contents: read
@@ -59,27 +59,61 @@ jobs:
         working-directory: ${{ inputs.working_directory }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - run: pwd
+
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_wrapper: false
       - run: terraform --version
-      - name: configure aws credentials
+
+      - name: configure aws credentials with oidc
+        if: ${{ inputs.working_directory == './init' }}
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_ARN }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ulfiac-oidc-gha-admin
           aws-region: us-east-2
+
+      - name: configure aws credentials with keys
+        if: ${{ inputs.working_directory == './root' }}
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
       - name: dump context
         run: |
           echo -e "Dumping context...\n"
+          echo -e "inputs context:\n${{ toJson(inputs) }}\n"
           echo -e "env context:\n${{ toJson(env) }}\n"
           echo -e "github context:\n${{ toJson(github) }}\n"
+
       - run: terraform init
       - run: terraform validate
+
+      - name: import root layer
+        if: ${{ inputs.import && inputs.working_directory == './root' }}
+        run: |
+          echo 'Importing root layer resources into terraform state...'
+          terraform import 'aws_iam_openid_connect_provider.oidc_gha' 'arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:oidc-provider/token.actions.githubusercontent.com'
+          terraform import 'aws_iam_role.oidc_gha_admin' 'ulfiac-oidc-gha-admin'
+          terraform import 'aws_iam_role_policy_attachment.oidc_gha_admin' 'ulfiac-oidc-gha-admin/arn:aws:iam::aws:policy/AdministratorAccess'
+          terraform import 'aws_s3_bucket.terraform_state' 'ulfiac-terraform-state'
+          terraform import 'aws_s3_bucket_public_access_block.terraform_state' 'ulfiac-terraform-state'
+          terraform import 'aws_s3_bucket_versioning.terraform_state' 'ulfiac-terraform-state'
+          terraform import 'aws_s3_bucket_lifecycle_configuration.terraform_state' 'ulfiac-terraform-state'
+          terraform import 'aws_s3_bucket_server_side_encryption_configuration.terraform_state' 'ulfiac-terraform-state'
+          terraform import 'aws_s3_bucket_ownership_controls.terraform_state' 'ulfiac-terraform-state'
+          terraform import 'aws_s3_bucket_policy.terraform_state' 'ulfiac-terraform-state'
+
       - run: terraform plan
         if: ${{ inputs.terraform_action == 'plan' }}
+
       - run: terraform plan -destroy
         if: ${{ inputs.terraform_action == 'plan destroy' }}
+
       - run: terraform apply -auto-approve
         if: ${{ inputs.terraform_action == 'apply' }}
+
       - run: terraform apply -destroy -auto-approve
         if: ${{ inputs.terraform_action == 'destroy' }}

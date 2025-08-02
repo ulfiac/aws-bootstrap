@@ -62,18 +62,18 @@ jobs:
         run: echo 'Approval provided.  Job will continue.'
 
   apply:
+    uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'apply' }}
     needs: get-approval-for-apply
-    uses: ./.github/workflows/reusable_terraform_action.yaml
     with:
       terraform_action: apply
       working_directory: ${{ github.event.inputs.working_directory }}
     secrets: inherit
 
   destroy:
+    uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'destroy' }}
     needs: get-approval-for-destroy
-    uses: ./.github/workflows/reusable_terraform_action.yaml
     with:
       terraform_action: destroy
       working_directory: ${{ github.event.inputs.working_directory }}
