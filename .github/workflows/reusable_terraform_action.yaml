@@ -1,5 +1,5 @@
 name: reusable tf action
-run-name: reusable tf action on ${{ inputs.working_directory }} - ${{ inputs.terraform_action }}
+run-name: tf action on ${{ inputs.terraform_layer }} - ${{ inputs.terraform_action }}
 
 on: 
   workflow_call:
@@ -7,7 +7,7 @@ on:
       terraform_action:
         required: true
         type: string
-      working_directory:
+      terraform_layer:
         required: true
         type: string
       import:
@@ -26,14 +26,14 @@ on:
           - plan destroy
           - apply
           - destroy
-      working_directory:
-        description: 'working directory'
+      terraform_layer:
+        description: 'terraform layer'
         required: true
-        default: './init'
+        default: admin_layer
         type: choice
         options:
-          - ./init
-          - ./root
+          - admin_layer
+          - root_layer
       import:
         description: 'import'
         required: false
@@ -52,11 +52,11 @@ permissions:
 
 jobs:
   terraform_action:
-    name: "tf action on ${{ inputs.working_directory }} - ${{ inputs.terraform_action }}"
+    name: "tf action on ${{ inputs.terraform_layer }} - ${{ inputs.terraform_action }}"
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${{ inputs.working_directory }}
+        working-directory: ./terraform/${{ inputs.terraform_layer }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - run: pwd
@@ -67,14 +67,14 @@ jobs:
       - run: terraform --version
 
       - name: configure aws credentials with oidc
-        if: ${{ inputs.working_directory == './init' }}
+        if: ${{ inputs.terraform_layer == 'admin_layer' }}
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ulfiac-oidc-gha-admin
           aws-region: us-east-2
 
       - name: configure aws credentials with keys
-        if: ${{ inputs.working_directory == './root' }}
+        if: ${{ inputs.terraform_layer == 'root_layer' }}
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -92,7 +92,7 @@ jobs:
       - run: terraform validate
 
       - name: import root layer
-        if: ${{ inputs.import && inputs.working_directory == './root' }}
+        if: ${{ inputs.import && inputs.terraform_layer == 'root_layer' }}
         run: |
           echo 'Importing root layer resources into terraform state...'
           terraform import 'aws_iam_openid_connect_provider.oidc_gha' 'arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:oidc-provider/token.actions.githubusercontent.com'

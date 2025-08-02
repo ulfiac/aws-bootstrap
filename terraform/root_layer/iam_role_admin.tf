@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "assume_role_policy_oidc_gha_admin" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:ulfiac/aws-admin:*"]
+      values   = ["repo:ulfiac/aws-bootstrap:*"]
     }
 
     principals {

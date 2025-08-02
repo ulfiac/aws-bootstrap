@@ -6,8 +6,8 @@ on:
     inputs:
       terraform_action:
         description: 'terraform action'
-        required: true
         type: choice
+        required: true
         default: 'plan'
         options:
           - plan
@@ -31,7 +31,7 @@ jobs:
     with:
       import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: plan
-      working_directory: './root'
+      terraform_layer: root_layer
     secrets: inherit
 
   plan-destroy:
@@ -40,7 +40,7 @@ jobs:
     with:
       import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: plan destroy
-      working_directory: './root'
+      terraform_layer: root_layer
     secrets: inherit
 
   get-approval-for-apply:
@@ -68,7 +68,7 @@ jobs:
     with:
       import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: apply
-      working_directory: './root'
+      terraform_layer: root_layer
     secrets: inherit
 
   destroy:
@@ -78,5 +78,5 @@ jobs:
     with:
       import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: destroy
-      working_directory: './root'
+      terraform_layer: root_layer
     secrets: inherit
