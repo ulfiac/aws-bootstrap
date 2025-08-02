@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "terraform_state" {
     actions = ["s3:*"]
     effect  = "Deny"
     resources = [
-      "${aws_s3_bucket.terraform_state.arn}",
+      aws_s3_bucket.terraform_state.arn,
       "${aws_s3_bucket.terraform_state.arn}/*",
     ]
 
@@ -117,7 +117,7 @@ data "aws_iam_policy_document" "terraform_state" {
     actions = ["s3:*"]
     effect  = "Allow"
     resources = [
-      "${aws_s3_bucket.terraform_state.arn}",
+      aws_s3_bucket.terraform_state.arn,
       "${aws_s3_bucket.terraform_state.arn}/*",
     ]
 
