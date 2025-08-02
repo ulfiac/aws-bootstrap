@@ -10,6 +10,10 @@ on:
       working_directory:
         required: true
         type: string
+      import:
+        required: false
+        type: boolean
+        default: true
   workflow_dispatch:
     inputs:
       terraform_action:
@@ -29,12 +33,18 @@ on:
         type: choice
         options:
           - ./init
+      import:
+        description: 'import'
+        required: false
+        default: true
+        type: boolean
 
 env:
   TF_LOG: OFF
   TF_LOG_CORE: OFF
   TF_LOG_PROVIDER: OFF
   TF_LOG_PATH: ./terraform.log
+  TF_VAR_import: ${{ inputs.import }}
 
 permissions:
   contents: read
