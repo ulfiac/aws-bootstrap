@@ -1,4 +1,4 @@
-name: deploy
+name: reusable deploy
 run-name: deploy ${{ inputs.terraform_layer }} - ${{ inputs.terraform_action }}
 
 on:
