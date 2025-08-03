@@ -14,11 +14,6 @@ on:
           - plan destroy
           - apply
           - destroy
-      import:
-        description: 'import'
-        required: true
-        type: boolean
-        default: true
 
 permissions:
   contents: read
@@ -29,7 +24,6 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'plan' || github.event.inputs.terraform_action == 'apply' }}
     with:
-      import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: plan
       terraform_layer: root_layer
     secrets: inherit
@@ -38,7 +32,6 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
     with:
-      import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: plan destroy
       terraform_layer: root_layer
     secrets: inherit
@@ -66,7 +59,6 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'apply' }}
     needs: get-approval-for-apply
     with:
-      import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: apply
       terraform_layer: root_layer
     secrets: inherit
@@ -76,7 +68,6 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'destroy' }}
     needs: get-approval-for-destroy
     with:
-      import: ${{ fromJSON(github.event.inputs.import) }}
       terraform_action: destroy
       terraform_layer: root_layer
     secrets: inherit
