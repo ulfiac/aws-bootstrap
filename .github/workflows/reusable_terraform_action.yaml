@@ -10,10 +10,6 @@ on:
       terraform_layer:
         required: true
         type: string
-      import:
-        required: false
-        type: boolean
-        default: false
   workflow_dispatch:
     inputs:
       terraform_action:
@@ -34,17 +30,15 @@ on:
         options:
           - admin_layer
           - root_layer
-      import:
-        description: 'import'
-        required: false
-        default: false
-        type: boolean
 
 env:
+  OIDC_GHA_IAM_ROLE_NAME: ${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
+  OIDC_GHA_PROVIDER_HOSTNAME: ${{ vars.OIDC_GHA_PROVIDER_HOSTNAME }}
   TF_LOG: OFF
   TF_LOG_CORE: OFF
   TF_LOG_PROVIDER: OFF
   TF_LOG_PATH: ./terraform.log
+  TF_STATE_S3_BUCKET_NAME: ${{ vars.TF_STATE_S3_BUCKET_NAME }}
 
 permissions:
   contents: read
@@ -66,11 +60,13 @@ jobs:
           terraform_wrapper: false
       - run: terraform --version
 
+      - run: aws --version
+
       - name: configure aws credentials with oidc
         if: ${{ inputs.terraform_layer == 'admin_layer' }}
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ulfiac-oidc-gha-admin
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
           aws-region: us-east-2
 
       - name: configure aws credentials with keys
@@ -92,19 +88,11 @@ jobs:
       - run: terraform validate
 
       - name: import root layer
-        if: ${{ inputs.import && inputs.terraform_layer == 'root_layer' }}
+        if: ${{ inputs.terraform_layer == 'root_layer' }}
         run: |
-          echo 'Importing root layer resources into terraform state...'
-          terraform import 'aws_iam_openid_connect_provider.oidc_gha' 'arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:oidc-provider/token.actions.githubusercontent.com'
-          terraform import 'aws_iam_role.oidc_gha_admin' 'ulfiac-oidc-gha-admin'
-          terraform import 'aws_iam_role_policy_attachment.oidc_gha_admin' 'ulfiac-oidc-gha-admin/arn:aws:iam::aws:policy/AdministratorAccess'
-          terraform import 'aws_s3_bucket.terraform_state' 'ulfiac-terraform-state'
-          terraform import 'aws_s3_bucket_public_access_block.terraform_state' 'ulfiac-terraform-state'
-          terraform import 'aws_s3_bucket_versioning.terraform_state' 'ulfiac-terraform-state'
-          terraform import 'aws_s3_bucket_lifecycle_configuration.terraform_state' 'ulfiac-terraform-state'
-          terraform import 'aws_s3_bucket_server_side_encryption_configuration.terraform_state' 'ulfiac-terraform-state'
-          terraform import 'aws_s3_bucket_ownership_controls.terraform_state' 'ulfiac-terraform-state'
-          terraform import 'aws_s3_bucket_policy.terraform_state' 'ulfiac-terraform-state'
+          pwd
+          chmod +x ../../scripts/import_root_layer.sh
+          ../../scripts/import_root_layer.sh
 
       - run: terraform plan
         if: ${{ inputs.terraform_action == 'plan' }}
