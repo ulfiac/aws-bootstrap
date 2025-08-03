@@ -5,69 +5,25 @@ on:
   workflow_dispatch:
     inputs:
       terraform_action:
-        description: 'terraform action'
-        type: choice
-        required: true
-        default: 'plan'
+        default: plan
+        description: terraform action
         options:
           - plan
           - plan destroy
           - apply
           - destroy
+        required: true
+        type: choice
 
 permissions:
   contents: read
   id-token: write
 
 jobs:
-  plan:
-    uses: ./.github/workflows/reusable_terraform_action.yaml
-    if: ${{ github.event.inputs.terraform_action == 'plan' || github.event.inputs.terraform_action == 'apply' }}
+  deploy_root_layer:
+    name: "deploy root layer - ${{ github.event.inputs.terraform_action }}"
+    uses: ./.github/workflows/reusable_deploy.yaml
     with:
-      terraform_action: plan
-      terraform_layer: root_layer
-    secrets: inherit
-
-  plan-destroy:
-    uses: ./.github/workflows/reusable_terraform_action.yaml
-    if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
-    with:
-      terraform_action: plan destroy
-      terraform_layer: root_layer
-    secrets: inherit
-
-  get-approval-for-apply:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.terraform_action == 'apply' }}
-    environment: approval_required
-    needs: plan
-    steps:
-      - name: Approval requested
-        run: echo 'Approval provided.  Job will continue.'
-
-  get-approval-for-destroy:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.terraform_action == 'destroy' }}
-    environment: approval_required
-    needs: plan-destroy
-    steps:
-      - name: Approval requested
-        run: echo 'Approval provided.  Job will continue.'
-
-  apply:
-    uses: ./.github/workflows/reusable_terraform_action.yaml
-    if: ${{ github.event.inputs.terraform_action == 'apply' }}
-    needs: get-approval-for-apply
-    with:
-      terraform_action: apply
-      terraform_layer: root_layer
-    secrets: inherit
-
-  destroy:
-    uses: ./.github/workflows/reusable_terraform_action.yaml
-    if: ${{ github.event.inputs.terraform_action == 'destroy' }}
-    needs: get-approval-for-destroy
-    with:
-      terraform_action: destroy
+      terraform_action: ${{ github.event.inputs.terraform_action }}
       terraform_layer: root_layer
     secrets: inherit
