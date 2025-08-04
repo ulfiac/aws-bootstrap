@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # terraform-fmt checks the formatting of Terraform configuration files.
+  # terraform syntax linter
   terraform-fmt:
     runs-on: ubuntu-latest
     steps:
@@ -19,10 +19,7 @@ jobs:
       - run: terraform --version
       - run: terraform fmt -check -diff -recursive .
 
-  # trivy is a security scanner for container images, file systems, and Git repositories.
-  # It detects vulnerabilities, misconfigurations, and other security issues in the scanned targets,
-  # helping to ensure that the code and configurations are secure and compliant with best practices.
-  # This job specifically checks the configuration files for security issues.
+  # security scanner
   trivy-config:
     runs-on: ubuntu-latest
     steps:
@@ -31,9 +28,7 @@ jobs:
       - run: trivy --version
       - run: trivy config --exit-code 1 .
 
-  # actionlint is a linter for GitHub Actions workflows. It checks for syntax errors, best practices,
-  # and potential issues in workflow files, helping to ensure that workflows are correctly defined
-  # and follow best practices.
+  # github action workflow linter
   actionlint:
     runs-on: ubuntu-latest
     steps:
@@ -42,9 +37,7 @@ jobs:
         with:
           args: -color
 
-  # tflint is a Terraform linter that checks for best practices and potential issues in Terraform
-  # configurations. It helps ensure that Terraform code adheres to best practices and is free from
-  # common pitfalls, improving the quality and maintainability of infrastructure as code.
+  # terraform linter
   tflint:
     runs-on: ubuntu-latest
     steps:
@@ -53,9 +46,7 @@ jobs:
       - run: tflint --version
       - run: tflint --recursive
 
-  # shellcheck is a tool for analyzing shell scripts to detect syntax errors, stylistic issues,
-  # and potential bugs. It helps ensure that shell scripts follow best practices and are
-  # free from common pitfalls.
+  # shell script linter
   shellcheck:
     runs-on: ubuntu-latest
     steps:
