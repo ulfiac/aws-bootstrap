@@ -5,15 +5,15 @@ on:
   workflow_dispatch:
     inputs:
       terraform_action:
-        description: 'terraform action'
-        type: choice
-        required: true
-        default: 'plan'
+        default: plan
+        description: terraform action
         options:
           - plan
           - plan destroy
           - apply
           - destroy
+        required: true
+        type: choice
 
 permissions:
   contents: read

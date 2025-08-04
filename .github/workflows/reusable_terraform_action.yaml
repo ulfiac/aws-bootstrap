@@ -13,23 +13,23 @@ on:
   workflow_dispatch:
     inputs:
       terraform_action:
-        description: 'terraform action'
-        required: true
-        default: 'plan'
-        type: choice
+        default: plan
+        description: terraform action
         options:
           - plan
           - plan destroy
           - apply
           - destroy
-      terraform_layer:
-        description: 'terraform layer'
         required: true
-        default: admin_layer
         type: choice
+      terraform_layer:
+        default: admin_layer
+        description: terraform layer
         options:
           - admin_layer
           - root_layer
+        required: true
+        type: choice
 
 env:
   OIDC_GHA_IAM_ROLE_NAME: ${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
