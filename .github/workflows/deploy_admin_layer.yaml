@@ -24,6 +24,7 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'plan' || github.event.inputs.terraform_action == 'apply' }}
     with:
+      auth: oidc
       terraform_action: plan
       terraform_layer: admin_layer
     secrets: inherit
@@ -32,6 +33,7 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
     with:
+      auth: oidc
       terraform_action: plan destroy
       terraform_layer: admin_layer
     secrets: inherit
@@ -59,6 +61,7 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'apply' }}
     needs: get-approval-for-apply
     with:
+      auth: oidc
       terraform_action: apply
       terraform_layer: admin_layer
     secrets: inherit
@@ -68,6 +71,7 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'destroy' }}
     needs: get-approval-for-destroy
     with:
+      auth: oidc
       terraform_action: destroy
       terraform_layer: admin_layer
     secrets: inherit

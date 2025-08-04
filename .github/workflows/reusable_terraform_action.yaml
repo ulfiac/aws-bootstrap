@@ -4,6 +4,10 @@ run-name: tf action on ${{ inputs.terraform_layer }} - ${{ inputs.terraform_acti
 on: 
   workflow_call:
     inputs:
+      auth:
+        default: oidc
+        required: false
+        type: string
       terraform_action:
         required: true
         type: string
@@ -12,6 +16,14 @@ on:
         type: string
   workflow_dispatch:
     inputs:
+      auth:
+        default: oidc
+        description: authentication method
+        options:
+          - keys
+          - oidc
+        required: false
+        type: choice
       terraform_action:
         default: plan
         description: terraform action
@@ -63,14 +75,14 @@ jobs:
       - run: aws --version
 
       - name: configure aws credentials with oidc
-        if: ${{ inputs.terraform_layer == 'admin_layer' }}
+        if: ${{ inputs.auth == 'oidc' }}
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
           aws-region: us-east-2
 
       - name: configure aws credentials with keys
-        if: ${{ inputs.terraform_layer == 'root_layer' }}
+        if: ${{ inputs.auth == 'keys' }}
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
