@@ -25,6 +25,7 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'plan' || github.event.inputs.terraform_action == 'apply' }}
     with:
       auth: oidc
+      aws_region: us-east-2
       terraform_action: plan
       terraform_layer: admin_layer
     secrets: inherit
@@ -34,6 +35,7 @@ jobs:
     if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
     with:
       auth: oidc
+      aws_region: us-east-2
       terraform_action: plan destroy
       terraform_layer: admin_layer
     secrets: inherit
@@ -62,6 +64,7 @@ jobs:
     needs: get-approval-for-apply
     with:
       auth: oidc
+      aws_region: us-east-2
       terraform_action: apply
       terraform_layer: admin_layer
     secrets: inherit
@@ -72,6 +75,7 @@ jobs:
     needs: get-approval-for-destroy
     with:
       auth: oidc
+      aws_region: us-east-2
       terraform_action: destroy
       terraform_layer: admin_layer
     secrets: inherit

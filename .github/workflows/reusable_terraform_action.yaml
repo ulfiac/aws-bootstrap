@@ -8,6 +8,10 @@ on:
         default: oidc
         required: false
         type: string
+      aws_region:
+        default: us-east-2
+        required: false
+        type: string
       terraform_action:
         required: true
         type: string
@@ -24,6 +28,14 @@ on:
           - oidc
         required: false
         type: choice
+      aws_region:
+        default: us-east-2
+        description: aws region
+        required: false
+        type: choice
+        options:
+          - us-east-2
+          - us-west-2
       terraform_action:
         default: plan
         description: terraform action
@@ -51,6 +63,7 @@ env:
   TF_LOG_PROVIDER: OFF
   TF_LOG_PATH: ./terraform.log
   TF_STATE_S3_BUCKET_NAME: ${{ vars.TF_STATE_S3_BUCKET_NAME }}
+  TF_VAR_aws_region: ${{ inputs.aws_region }}
 
 permissions:
   contents: read
@@ -58,7 +71,7 @@ permissions:
 
 jobs:
   terraform_action:
-    name: "tf action on ${{ inputs.terraform_layer }} - ${{ inputs.terraform_action }}"
+    name: "${{ inputs.terraform_action }} on ${{ inputs.terraform_layer }} in ${{ inputs.aws_region }}"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -79,7 +92,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # 4.0.2
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
-          aws-region: us-east-2
+          aws-region: ${{ inputs.aws_region }}
 
       - name: configure aws credentials with keys
         if: ${{ inputs.auth == 'keys' }}
@@ -87,7 +100,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: ${{ inputs.aws_region }}
 
       - name: dump context
         run: |
