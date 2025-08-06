@@ -119,11 +119,21 @@ jobs:
           chmod +x ../../scripts/import_root_layer.sh
           ../../scripts/import_root_layer.sh
 
-      - run: terraform plan
+      - run: terraform plan -out=./tfplan.binary
         if: ${{ inputs.terraform_action == 'plan' }}
 
-      - run: terraform plan -destroy
+      - run: terraform plan -destroy -out=./tfplan.binary
         if: ${{ inputs.terraform_action == 'plan destroy' }}
+
+      - name: show plan summary
+        if: ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
+        run: |
+          #echo; terraform show ./tfplan.binary | { grep '#' || [[ $? == 1 ]] } | { grep -v 'unchanged attribute' || [[ $? == 1 ]] } | nl
+          echo; terraform show ./tfplan.binary | { grep '#' || test $? = 1; } | { grep -v 'unchanged attribute' || test $? = 1; } | nl
+          echo; terraform show ./tfplan.binary | grep -E '(No changes|Plan:)'
+
+      # - run: terraform show -json ./tfplan.out > tfplan.json
+      #   if: ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
 
       - run: terraform apply -auto-approve
         if: ${{ inputs.terraform_action == 'apply' }}
