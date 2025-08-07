@@ -114,10 +114,7 @@ jobs:
 
       - name: import root layer
         if: ${{ inputs.terraform_layer == 'root_layer' }}
-        run: |
-          pwd
-          chmod +x ../../scripts/import_root_layer.sh
-          ../../scripts/import_root_layer.sh
+        run: ../../scripts/import_root_layer.sh
 
       - run: terraform plan -out=./tfplan.binary
         if: ${{ inputs.terraform_action == 'plan' }}
