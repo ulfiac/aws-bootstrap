@@ -116,11 +116,17 @@ jobs:
         if: ${{ inputs.terraform_layer == 'root_layer' }}
         run: ../../scripts/import_root_layer.sh
 
-      - run: terraform plan -out=./tfplan.binary
+      - name: terraform plan
         if: ${{ inputs.terraform_action == 'plan' }}
+        run: |
+          echo "::notice::Plan details."
+          terraform plan -out=./tfplan.binary
 
-      - run: terraform plan -destroy -out=./tfplan.binary
+      - name: terraform plan destroy
         if: ${{ inputs.terraform_action == 'plan destroy' }}
+        run: |
+          echo "::notice::Plan destroy details."
+          terraform plan -destroy -out=./tfplan.binary
 
       - name: show plan summary
         if: ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
@@ -129,11 +135,14 @@ jobs:
           echo; terraform show ./tfplan.binary | { grep '#' || test $? = 1; } | { grep -v 'unchanged attribute' || test $? = 1; } | nl
           echo; terraform show ./tfplan.binary | grep -E '(No changes|Plan:)'
 
-      # - run: terraform show -json ./tfplan.out > tfplan.json
-      #   if: ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
-
-      - run: terraform apply -auto-approve
+      - name: terraform apply
         if: ${{ inputs.terraform_action == 'apply' }}
+        run: |
+          echo "::notice::Apply details."
+          terraform apply -auto-approve
 
-      - run: terraform apply -destroy -auto-approve
+      - name: terraform destroy
         if: ${{ inputs.terraform_action == 'destroy' }}
+        run: |
+          echo "::notice::Destroy details."
+          terraform apply -destroy -auto-approve
