@@ -129,17 +129,8 @@ jobs:
           echo; echo "::notice::Plan destroy details."; echo
 
       - name: show plan summary
-        if: ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
-        run: |
-          echo; terraform show ./tfplan.binary | { grep '#' || test $? = 1; } | { grep -v 'unchanged attribute' || test $? = 1; } | nl
-          echo; terraform show ./tfplan.binary | grep -E '(No changes|Plan:)'
-          echo; echo "::notice::Plan summary."; echo
-
-      - name: send plan summary to annotation
         if : ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
-        run: |
-          terraform show -no-color ./tfplan.binary | { grep '#' || test $? = 1; } | { grep -v 'unchanged attribute' || test $? = 1; } | nl | sed 's/#//g' >> "$GITHUB_STEP_SUMMARY"
-          terraform show -no-color ./tfplan.binary | grep -E '(No changes|Plan:)' >> "$GITHUB_STEP_SUMMARY"
+        run: ../../scripts/show_plan_summary.sh
 
       - name: terraform apply
         if: ${{ inputs.terraform_action == 'apply' }}
