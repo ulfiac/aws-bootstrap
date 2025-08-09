@@ -15,6 +15,9 @@ on:
       terraform_action:
         required: true
         type: string
+      terraform_layer:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       auth:
