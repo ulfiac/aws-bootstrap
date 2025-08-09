@@ -126,7 +126,7 @@ jobs:
         if: ${{ inputs.terraform_action == 'plan destroy' }}
         run: |
           terraform plan -destroy -out=./tfplan.binary
-          echo; echo "::notice::Plan destroy details."; echo
+          echo; echo "::notice::Plan details."; echo
 
       - name: show plan summary
         if : ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
