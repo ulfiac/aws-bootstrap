@@ -29,7 +29,6 @@ permissions:
 
 jobs:
   plan:
-    job_id: plan
     uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'plan' || github.event.inputs.terraform_action == 'apply' }}
     with:
@@ -40,7 +39,7 @@ jobs:
     secrets: inherit
 
   plan-destroy:
-    job_id: plan-destroy
+    id: plan-destroy
     uses: ./.github/workflows/reusable_terraform_action.yaml
     if: ${{ github.event.inputs.terraform_action == 'plan destroy' || github.event.inputs.terraform_action == 'destroy' }}
     with:
