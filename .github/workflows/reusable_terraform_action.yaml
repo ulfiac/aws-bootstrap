@@ -105,11 +105,11 @@ jobs:
       - name: dump context
         run: |
           echo -e "Dumping context...\n"
-          echo -e "::group::inputs context:\n${{ toJson(inputs) }}\n"
+          echo -e "::group::inputs context:\n${{ toJson(inputs) }}"
           echo -e "::endgroup::\n"
-          echo -e "::group::env context:\n${{ toJson(env) }}\n"
+          echo -e "::group::env context:\n${{ toJson(env) }}"
           echo -e "::endgroup::\n"
-          echo -e "::group::github context:\n${{ toJson(github) }}\n"
+          echo -e "::group::github context:\n${{ toJson(github) }}"
           echo -e "::endgroup::\n"
 
       # - name: dump context from scripts
