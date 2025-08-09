@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ inputs.terraform_action == 'apply' || inputs.terraform_action == 'destroy' }}
     environment: approval_required
-    needs: plan
+    needs: plan-from-deploy-reusable
     steps:
       - name: Approval requested
         run: echo 'Approval provided.  Job will continue.'
