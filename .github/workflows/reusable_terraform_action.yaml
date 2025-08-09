@@ -103,11 +103,19 @@ jobs:
           aws-region: ${{ inputs.aws_region }}
 
       - name: dump context
-        run: |
-          echo -e "Dumping context...\n"
-          echo -e "inputs context:\n${{ toJson(inputs) }}\n"
-          echo -e "env context:\n${{ toJson(env) }}\n"
-          echo -e "github context:\n${{ toJson(github) }}\n"
+        env:
+          CONTEXT_ENV: ${{ toJson(env) }}
+          CONTEXT_GITHUB: ${{ toJson(github) }}
+          CONTEXT_INPUTS: ${{ toJson(inputs) }}
+          CONTEXT_JOB: ${{ toJson(job) }}
+          CONTEXT_MATRIX: ${{ toJson(matrix) }}
+          CONTEXT_NEEDS: ${{ toJson(needs) }}
+          CONTEXT_RUNNER: ${{ toJson(runner) }}
+          CONTEXT_SECRETS: ${{ toJson(secrets) }}
+          CONTEXT_STEPS: ${{ toJson(steps) }}
+          CONTEXT_STRATEGY: ${{ toJson(strategy) }}
+          CONTEXT_VARS: ${{ toJson(vars) }}
+        run: ../../scripts/dump_context.sh
 
       - run: terraform init
       - run: terraform validate
@@ -120,13 +128,13 @@ jobs:
         if: ${{ inputs.terraform_action == 'plan' }}
         run: |
           terraform plan -out=./tfplan.binary
-          echo; echo "::notice::Plan details."; echo
+          echo -e "\n::notice::Plan details.\n"
 
       - name: terraform plan destroy
         if: ${{ inputs.terraform_action == 'plan destroy' }}
         run: |
           terraform plan -destroy -out=./tfplan.binary
-          echo; echo "::notice::Plan destroy details."; echo
+          echo -e "\n::notice::Plan destroy details.\n"
 
       - name: show plan summary
         if : ${{ inputs.terraform_action == 'plan' || inputs.terraform_action == 'plan destroy' }}
@@ -136,10 +144,10 @@ jobs:
         if: ${{ inputs.terraform_action == 'apply' }}
         run: |
           terraform apply -auto-approve
-          echo; echo "::notice::Apply details."; echo
+          echo -e "\n::notice::Apply details.\n"
 
       - name: terraform destroy
         if: ${{ inputs.terraform_action == 'destroy' }}
         run: |
           terraform apply -destroy -auto-approve
-          echo; echo "::notice::Destroy details."; echo
+          echo -e "\n::notice::Destroy details.\n"
