@@ -105,15 +105,30 @@ jobs:
       - name: dump context
         run: |
           echo -e "Dumping context...\n"
-          echo -e "::group::inputs context:\n${{ toJson(inputs) }}"
-          echo -e "::endgroup::\n"
           echo -e "::group::env context:\n${{ toJson(env) }}"
           echo -e "::endgroup::\n"
           echo -e "::group::github context:\n${{ toJson(github) }}"
           echo -e "::endgroup::\n"
-
-      # - name: dump context from scripts
-      #   run: ../../scripts/dump_context.sh
+          echo -e "::group::inputs context:\n${{ toJson(inputs) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::job context:\n${{ toJson(job) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::jobs context:\n${{ toJson(jobs) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::matrix context:\n${{ toJson(matrix) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::needs context:\n${{ toJson(needs) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::runner context:\n${{ toJson(runner) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::secrets context:\n${{ toJson(secrets) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::steps context:\n${{ toJson(steps) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::strategy context:\n${{ toJson(strategy) }}"
+          echo -e "::endgroup::\n"
+          echo -e "::group::vars context:\n${{ toJson(vars) }}"
+          echo -e "::endgroup::\n"
 
       - run: terraform init
       - run: terraform validate
