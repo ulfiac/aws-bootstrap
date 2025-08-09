@@ -109,6 +109,9 @@ jobs:
           echo -e "env context:\n${{ toJson(env) }}\n"
           echo -e "github context:\n${{ toJson(github) }}\n"
 
+      - name: dump context from scripts
+        run: ../../scripts/dump_context.sh
+
       - run: terraform init
       - run: terraform validate
 
