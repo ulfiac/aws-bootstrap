@@ -56,14 +56,14 @@ on:
         type: choice
 
 env:
-  OIDC_GHA_IAM_ROLE_NAME: ${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
-  OIDC_GHA_PROVIDER_HOSTNAME: ${{ vars.OIDC_GHA_PROVIDER_HOSTNAME }}
   TF_LOG: OFF
   TF_LOG_CORE: OFF
   TF_LOG_PROVIDER: OFF
   TF_LOG_PATH: ./terraform.log
-  TF_STATE_S3_BUCKET_NAME: ${{ vars.TF_STATE_S3_BUCKET_NAME }}
   TF_VAR_aws_region: ${{ inputs.aws_region }}
+  TF_VAR_oidc_gha_iam_role_name: ${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
+  TF_VAR_oidc_gha_provider_hostname: ${{ vars.OIDC_GHA_PROVIDER_HOSTNAME }}
+  TF_VAR_tf_state_s3_bucket_name: ${{ vars.TF_STATE_S3_BUCKET_NAME }}
 
 permissions:
   contents: read
@@ -122,6 +122,10 @@ jobs:
 
       - name: import root layer
         if: ${{ inputs.terraform_layer == 'root_layer' }}
+        env:
+          OIDC_GHA_IAM_ROLE_NAME: ${{ vars.OIDC_GHA_IAM_ROLE_NAME }}
+          OIDC_GHA_PROVIDER_HOSTNAME: ${{ vars.OIDC_GHA_PROVIDER_HOSTNAME }}
+          TF_STATE_S3_BUCKET_NAME: ${{ vars.TF_STATE_S3_BUCKET_NAME }}
         run: ../../scripts/import_root_layer.sh
 
       - name: terraform plan

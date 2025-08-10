@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Required environment variables:
-#   TF_STATE_S3_BUCKET_NAME     - Name of the S3 bucket for Terraform state
 #   OIDC_GHA_IAM_ROLE_NAME      - Name of the IAM role for OIDC authentication
 #   OIDC_GHA_PROVIDER_HOSTNAME  - Hostname of the OIDC provider for GitHub Actions
+#   TF_STATE_S3_BUCKET_NAME     - Name of the S3 bucket for Terraform state
 
 # check versions
 aws --version
