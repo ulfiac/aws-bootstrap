@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "assume_role_policy_oidc_gha_admin" {
 
 resource "aws_iam_role" "oidc_gha_admin" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_oidc_gha_admin.json
-  name               = local.role_name_admin
+  name               = var.oidc_gha_iam_role_name
 }
 
 data "aws_iam_policy" "admin_access" {
