@@ -11,3 +11,7 @@ resource "aws_iam_user_policy_attachment" "admin_user" {
   user       = aws_iam_user.admin_user.name
   policy_arn = data.aws_iam_policy.admin_access.arn
 }
+
+resource "aws_iam_user_login_profile" "admin_user" {
+  user = aws_iam_user.admin_user.name
+}
