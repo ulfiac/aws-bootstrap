@@ -17,7 +17,7 @@ fi
 # | sed 's/#//g'         : remove the # character for cleaner output
 # || true                : grep returns non-zero exit code if no lines match - the "or true" prevents the script from exiting
 get_resource_summary() {
-  grep '#' | grep -v 'unchanged' | nl | sed 's/#//g' | sed 's/destroy/\x1b[31mdestroy\x1b[0m/g' || true
+  grep '#' | grep -v 'unchanged' | nl | sed 's/#//g' || true
 }
 
 # extract plan summary lines
