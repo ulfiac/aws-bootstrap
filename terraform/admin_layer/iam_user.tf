@@ -9,5 +9,5 @@ data "aws_iam_policy" "admin_access" {
 
 resource "aws_iam_user_policy_attachment" "admin_user" {
   user       = aws_iam_user.admin_user.name
-  policy_arn = aws_iam_policy.admin_access.arn
+  policy_arn = data.aws_iam_policy.admin_access.arn
 }
