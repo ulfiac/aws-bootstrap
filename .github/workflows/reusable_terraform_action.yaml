@@ -83,9 +83,11 @@ jobs:
       - name: add gpg public key
         if: ${{ inputs.terraform_layer == 'admin_layer' }}
         env:
-          GPG_PUBLIC_KEY_BINARY: ${{ vars.GPG_PUBLIC_KEY_BINARY }}
+          GPG_PUBLIC_KEY_BINARY_BASE64: ${{ vars.GPG_PUBLIC_KEY_BINARY_BASE64 }}
+          GPG_PUBLIC_KEY_ARMORED: ${{ vars.GPG_PUBLIC_KEY_ARMORED }}
         run: |
           shasum --version
+          gpg --version
           ../../scripts/add_gpg_public_key.sh
 
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2

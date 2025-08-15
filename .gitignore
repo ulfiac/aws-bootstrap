@@ -44,3 +44,4 @@ terraform.rc
 
 # gpg files
 *.gpg
+*.asc
