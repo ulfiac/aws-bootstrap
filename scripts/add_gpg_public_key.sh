@@ -18,8 +18,8 @@ echo -n $GPG_PUBLIC_KEY_BINARY_BASE64 > ./public_key_binary_base64encoded.gpg
 echo -n $GPG_PUBLIC_KEY_ARMORED > ./public_key_armored.asc
 
 # calculate sha256 hash of file(s)
-calculated_sha256_binary_base64=shasum -a 256 ./public_key_binary_base64encoded.gpg
-calculated_sha256_armored=shasum -a 256 ./public_key_armored.asc
+calculated_sha256_binary_base64=$(shasum -a 256 ./public_key_binary_base64encoded.gpg)
+calculated_sha256_armored=$(shasum -a 256 ./public_key_armored.asc)
 
 # output
 echo "gpg binary base64 encoded public key:"
