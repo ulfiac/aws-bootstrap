@@ -19,5 +19,6 @@ resource "aws_iam_user_login_profile" "admin_user" {
 }
 
 output "password" {
-  value = aws_iam_user_login_profile.admin_user.password
+  value     = aws_iam_user_login_profile.admin_user.password
+  sensitive = true
 }
