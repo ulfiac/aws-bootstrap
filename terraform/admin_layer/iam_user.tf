@@ -13,5 +13,11 @@ resource "aws_iam_user_policy_attachment" "admin_user" {
 }
 
 resource "aws_iam_user_login_profile" "admin_user" {
-  user = aws_iam_user.admin_user.name
+  user                    = aws_iam_user.admin_user.name
+  password_length         = 42
+  password_reset_required = true
+}
+
+output "password" {
+  value = aws_iam_user_login_profile.admin_user.password
 }
