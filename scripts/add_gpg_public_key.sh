@@ -13,11 +13,20 @@ EXPECTED_SHA256_ARMORED='324a45b8e9456f7506dbe5bf6c3d491e98bced1e2bf9d6992e23d65
 echo $GPG_PUBLIC_KEY_BINARY_BASE64 > ./public_key_binary_base64encoded.gpg
 echo $GPG_PUBLIC_KEY_ARMORED > ./public_key_armored.asc
 
+# decode the binary
+echo $GPG_PUBLIC_KEY_BINARY_BASE64 | base64 -d > ./public_key_binary.gpg
+
 # calculate sha256 hash of file(s)
+calculated_sha256_binary=$(shasum -a 256 ./public_key_binary.gpg)
 calculated_sha256_binary_base64=$(shasum -a 256 ./public_key_binary_base64encoded.gpg)
 calculated_sha256_armored=$(shasum -a 256 ./public_key_armored.asc)
 
 # output
+echo
+echo "gpg binary public key:"
+echo "expected sha256:    $EXPECTED_SHA256_BINARY"
+echo "calculated sha256:  $calculated_sha256_binary"
+echo
 echo "gpg binary base64 encoded public key:"
 echo "expected sha256:    $EXPECTED_SHA256_BINARY_BASE64"
 echo "calculated sha256:  $calculated_sha256_binary_base64"
