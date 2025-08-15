@@ -80,6 +80,14 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - run: pwd
 
+      - name: add gpg public key
+        if: ${{ inputs.terraform_layer == 'admin_layer' }}
+        env:
+          GPG_PUBLIC_KEY_BINARY: ${{ vars.GPG_PUBLIC_KEY_BINARY }}
+        run: |
+          shasum --version
+          ../../scripts/add_gpg_public_key.sh
+
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_wrapper: false
