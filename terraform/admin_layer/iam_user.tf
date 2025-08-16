@@ -12,13 +12,21 @@ resource "aws_iam_user_policy_attachment" "admin_user" {
   policy_arn = data.aws_iam_policy.admin_access.arn
 }
 
-resource "aws_iam_user_login_profile" "admin_user" {
-  user                    = aws_iam_user.admin_user.name
-  password_length         = 42
-  password_reset_required = true
+data "local_file" "pgp_key" {
+  filename = abspath("./public_key_binary.gpg")
 }
 
-output "password" {
-  value     = aws_iam_user_login_profile.admin_user.password
-  sensitive = true
+resource "aws_iam_user_login_profile" "admin_user" {
+  pgp_key                 = data.local_file.pgp_key.content_base64
+  password_length         = 42
+  password_reset_required = true
+  user                    = aws_iam_user.admin_user.name
+}
+
+output "encrypted_password" {
+  value = aws_iam_user_login_profile.admin_user.encrypted_password
+}
+
+output "local_file_pgp_key_content_sha256" {
+  value = data.local_file.pgp_key.content_sha256
 }
