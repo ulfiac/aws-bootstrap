@@ -21,9 +21,8 @@ get_resource_summary() {
 }
 
 # extract plan summary lines
-# every plan will have either a "No changes" or a "Plan:" line
 get_plan_summary() {
-  grep -E '(No changes|Plan:)'
+  grep -E '(No changes|Plan:)' || true
 }
 
 
