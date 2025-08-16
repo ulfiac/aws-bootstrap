@@ -30,3 +30,7 @@ output "encrypted_password" {
 output "local_file_pgp_key_content_sha256" {
   value = data.local_file.pgp_key.content_sha256
 }
+
+output "local_file_pgp_key_content_base64_sha256" {
+  value = data.local_file.pgp_key.content_base64sha256
+}
