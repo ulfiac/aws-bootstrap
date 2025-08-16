@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# links
+# https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+# https://stackoverflow.com/questions/53513795/pgp-key-in-terraform-for-aws-iam-user-login-profile
+# https://unix.stackexchange.com/questions/623375/what-is-the-armored-option-for-in-gnupg
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_login_profile
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key#pgp_key
+# https://stackoverflow.com/questions/61096521/how-to-use-gpg-key-in-github-actions
+# https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file
+# https://ss64.com/mac/shasum.html
+
+
 # Required environment variables:
 #   GPG_PUBLIC_KEY_BINARY_BASE64 - the binary (not armored) and base64 encoded export of the gpg pulic key 
 #   GPG_PUBLIC_KEY_ARMORED       - the armored export of the gpg public key
