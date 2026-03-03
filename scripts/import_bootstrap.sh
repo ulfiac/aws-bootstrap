@@ -2,9 +2,7 @@
 set -euo pipefail
 
 # Required environment variables:
-#   AWS_REGION              - AWS region to operate in
 #   OIDC_ROLE_TO_ASSUME     - Name of the IAM role to assume for OIDC authentication
-#   TF_STATE_S3_BUCKET_NAME - Name of the S3 bucket for Terraform state
 
 # check versions
 aws --version
