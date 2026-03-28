@@ -12,6 +12,13 @@ on:
           - oidc
         required: false
         type: choice
+      aws_environment:
+        default: aws_mgmt
+        description: aws environment
+        required: false
+        type: choice
+        options:
+          - aws_mgmt
       terraform_action:
         default: plan
         description: terraform action
@@ -22,8 +29,9 @@ on:
           - destroy
         required: true
         type: choice
-      context_details:
+      annotate_context_details:
         default: false
+        description: annotate context details
         required: false
         type: boolean
 
@@ -58,9 +66,10 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     needs: set-plan-action
     with:
+      annotate_context_details: ${{ inputs.annotate_context_details }}
       auth: ${{ inputs.auth }}
+      aws_environment: ${{ inputs.aws_environment }}
       aws_region: us-east-2
-      context_details: ${{ inputs.context_details }}
       terraform_action: ${{ needs.set-plan-action.outputs.plan_action }}
     secrets: inherit
 
@@ -79,8 +88,9 @@ jobs:
     if: ${{ inputs.terraform_action == 'apply' || inputs.terraform_action == 'destroy' }}
     needs: get-approval
     with:
+      annotate_context_details: ${{ inputs.annotate_context_details }}
       auth: ${{ inputs.auth }}
+      aws_environment: ${{ inputs.aws_environment }}
       aws_region: us-east-2
-      context_details: ${{ inputs.context_details }}
       terraform_action: ${{ inputs.terraform_action }}
     secrets: inherit

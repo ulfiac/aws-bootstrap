@@ -4,46 +4,53 @@ run-name: tf action - ${{ inputs.terraform_action }}
 on:
   workflow_call:
     inputs:
+      annotate_context_details:
+        default: false
+        required: false
+        type: boolean
       auth:
         default: oidc
+        required: false
+        type: string
+      aws_environment:
+        default: aws_mgmt
         required: false
         type: string
       aws_region:
         default: us-east-2
         required: false
         type: string
-      context_details:
-        default: false
-        required: false
-        type: boolean
       terraform_action:
         required: true
         type: string
   workflow_dispatch:
     inputs:
+      annotate_context_details:
+        default: false
+        required: false
+        type: boolean
       auth:
         default: oidc
-        description: authentication method
         options:
           - keys
           - oidc
         required: false
         type: choice
+      aws_environment:
+        default: aws_mgmt
+        required: false
+        type: choice
+        options:
+          - aws_mgmt
       aws_region:
         default: us-east-2
-        description: aws region
         required: false
         type: choice
         options:
           - us-east-2
           - us-west-2
-      context_details:
-        default: false
-        required: false
-        type: boolean
       terraform_action:
         default: plan
-        description: terraform action
         options:
           - plan
           - plan destroy
@@ -66,12 +73,12 @@ permissions:
 
 jobs:
   terraform_action:
-    name: "${{ inputs.terraform_action }} in ${{ inputs.aws_region }}"
+    name: "${{ inputs.terraform_action }}: ${{ inputs.aws_environment }} in ${{ inputs.aws_region }}"
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./terraform
-    environment: aws_mgmt
+    environment: ${{ inputs.aws_environment }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2, released 2026-01, checked 2026-03
       - run: pwd
@@ -83,13 +90,6 @@ jobs:
 
       - run: aws --version
 
-      - name: configure aws credentials with oidc
-        if: ${{ inputs.auth == 'oidc' }}
-        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0, released 2026-02, checked 2026-03
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_region }}
-
       - name: configure aws credentials with keys
         if: ${{ inputs.auth == 'keys' }}
         uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0, released 2026-02, checked 2026-03
@@ -98,10 +98,27 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.aws_region }}
 
-      - name: dump context
-        uses: ulfiac/common-reusables/.github/actions/dump_context@main
+      - name: configure aws credentials with oidc
+        if: ${{ inputs.auth == 'oidc' }}
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0, released 2026-02, checked 2026-03
         with:
-          annotate: ${{ inputs.context_details }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: dump context (script)
+        env:
+          ANNOTATE: ${{ inputs.annotate_context_details }}
+          CONTEXT_ENV: ${{ toJson(env) }}
+          CONTEXT_GITHUB: ${{ toJson(github) }}
+          CONTEXT_INPUTS: ${{ toJson(inputs) }}
+          CONTEXT_JOB: ${{ toJson(job) }}
+          CONTEXT_MATRIX: ${{ toJson(matrix) }}
+          CONTEXT_NEEDS: ${{ toJson(needs) }}
+          CONTEXT_RUNNER: ${{ toJson(runner) }}
+          CONTEXT_STEPS: ${{ toJson(steps) }}
+          CONTEXT_STRATEGY: ${{ toJson(strategy) }}
+          CONTEXT_VARS: ${{ toJson(vars) }}
+        run: ${{ github.workspace }}/scripts/dump_context.sh
 
       - run: terraform init
       - run: terraform validate
