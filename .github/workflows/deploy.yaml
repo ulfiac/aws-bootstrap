@@ -29,9 +29,9 @@ on:
           - destroy
         required: true
         type: choice
-      annotate_context_details:
+      dump_context:
         default: false
-        description: annotate context details
+        description: dump context
         required: false
         type: boolean
 
@@ -66,7 +66,7 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     needs: set-plan-action
     with:
-      annotate_context_details: ${{ inputs.annotate_context_details }}
+      dump_context: ${{ inputs.dump_context }}
       auth: ${{ inputs.auth }}
       aws_environment: ${{ inputs.aws_environment }}
       terraform_action: ${{ needs.set-plan-action.outputs.plan_action }}
@@ -87,7 +87,7 @@ jobs:
     if: ${{ inputs.terraform_action == 'apply' || inputs.terraform_action == 'destroy' }}
     needs: get-approval
     with:
-      annotate_context_details: ${{ inputs.annotate_context_details }}
+      dump_context: ${{ inputs.dump_context }}
       auth: ${{ inputs.auth }}
       aws_environment: ${{ inputs.aws_environment }}
       terraform_action: ${{ inputs.terraform_action }}

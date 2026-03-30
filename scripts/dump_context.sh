@@ -46,7 +46,4 @@ echo "::group::vars context:"
 echo "$CONTEXT_VARS"
 echo "::endgroup::"
 
-# if the ANNOTATE env var is set to "true", then annotate the context details in the GitHub Actions log
-if [[ "$ANNOTATE" = "true" ]]; then
-  echo -e "\n::notice::Context details.\n"
-fi
+echo -e "\n::notice::Context details.\n"
