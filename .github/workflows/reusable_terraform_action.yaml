@@ -4,10 +4,6 @@ run-name: tf action - ${{ inputs.terraform_action }}
 on:
   workflow_call:
     inputs:
-      annotate_context_details:
-        default: false
-        required: false
-        type: boolean
       auth:
         default: oidc
         required: false
@@ -16,15 +12,15 @@ on:
         default: aws_mgmt
         required: false
         type: string
+      dump_context:
+        default: false
+        required: false
+        type: boolean
       terraform_action:
         required: true
         type: string
   workflow_dispatch:
     inputs:
-      annotate_context_details:
-        default: false
-        required: false
-        type: boolean
       auth:
         default: oidc
         options:
@@ -47,6 +43,10 @@ on:
           - destroy
         required: true
         type: choice
+      dump_context:
+        default: false
+        required: false
+        type: boolean
 
 env:
   TF_LOG: OFF
@@ -95,8 +95,8 @@ jobs:
           aws-region: us-east-2
 
       - name: dump context (script)
+        if: ${{ inputs.dump_context }}
         env:
-          ANNOTATE: ${{ inputs.annotate_context_details }}
           CONTEXT_ENV: ${{ toJson(env) }}
           CONTEXT_GITHUB: ${{ toJson(github) }}
           CONTEXT_INPUTS: ${{ toJson(inputs) }}
