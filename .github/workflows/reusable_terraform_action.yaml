@@ -16,10 +16,6 @@ on:
         default: aws_mgmt
         required: false
         type: string
-      aws_region:
-        default: us-east-2
-        required: false
-        type: string
       terraform_action:
         required: true
         type: string
@@ -42,13 +38,6 @@ on:
         type: choice
         options:
           - aws_mgmt
-      aws_region:
-        default: us-east-2
-        required: false
-        type: choice
-        options:
-          - us-east-2
-          - us-west-2
       terraform_action:
         default: plan
         options:
@@ -65,7 +54,6 @@ env:
   TF_LOG_PROVIDER: OFF
   TF_LOG_PATH: ./terraform.log
   TF_VAR_aws_environment: ${{ inputs.aws_environment }}
-  # TF_VAR_aws_region: ${{ inputs.aws_region }}
   TF_VAR_oidc_role_to_assume: ${{ vars.OIDC_ROLE_TO_ASSUME }}
 
 permissions:
@@ -74,7 +62,7 @@ permissions:
 
 jobs:
   terraform_action:
-    name: "${{ inputs.terraform_action }}: ${{ inputs.aws_environment }} in ${{ inputs.aws_region }}"
+    name: "${{ inputs.terraform_action }}: ${{ inputs.aws_environment }}"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -97,14 +85,14 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ inputs.aws_region }}
+          aws-region: us-east-2
 
       - name: configure aws credentials with oidc
         if: ${{ inputs.auth == 'oidc' }}
         uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0, released 2026-02, checked 2026-03
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_region }}
+          aws-region: us-east-2
 
       - name: dump context (script)
         env:

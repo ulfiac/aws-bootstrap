@@ -69,7 +69,6 @@ jobs:
       annotate_context_details: ${{ inputs.annotate_context_details }}
       auth: ${{ inputs.auth }}
       aws_environment: ${{ inputs.aws_environment }}
-      aws_region: us-east-2
       terraform_action: ${{ needs.set-plan-action.outputs.plan_action }}
     secrets: inherit
 
@@ -91,6 +90,5 @@ jobs:
       annotate_context_details: ${{ inputs.annotate_context_details }}
       auth: ${{ inputs.auth }}
       aws_environment: ${{ inputs.aws_environment }}
-      aws_region: us-east-2
       terraform_action: ${{ inputs.terraform_action }}
     secrets: inherit
