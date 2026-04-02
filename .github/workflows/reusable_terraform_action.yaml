@@ -121,6 +121,9 @@ jobs:
         if: ${{ inputs.aws_environment == 'aws_mgmt' }}
         env:
           AWS_ORGANIZATION_ID: ${{ secrets.AWS_ORGANIZATION_ID }}
+          AWS_ORGANIZATIONAL_UNIT_ID_WORKLOADS: ${{ secrets.AWS_ORGANIZATIONAL_UNIT_ID_WORKLOADS }}
+          AWS_ORGANIZATIONAL_UNIT_ID_WORKLOADS_PROD: ${{ secrets.AWS_ORGANIZATIONAL_UNIT_ID_WORKLOADS_PROD }}
+          AWS_ORGANIZATIONAL_UNIT_ID_WORKLOADS_TEST: ${{ secrets.AWS_ORGANIZATIONAL_UNIT_ID_WORKLOADS_TEST }}
         run: ../scripts/import_organization.sh
 
       - name: terraform plan
