@@ -1,6 +1,10 @@
 #trivy:ignore:AVD-AWS-0089 (LOW): Bucket has logging disabled
 resource "aws_s3_bucket" "terraform_state_bucket" {
   bucket = local.terraform_state_bucket_name
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "terraform_state_bucket" {
@@ -31,6 +35,17 @@ resource "aws_s3_bucket_lifecycle_configuration" "terraform_state_bucket" {
 
     noncurrent_version_expiration {
       noncurrent_days = 30
+    }
+  }
+
+  rule {
+    id     = "abort_incomplete_multipart_uploads"
+    status = "Enabled"
+
+    filter {}
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 3
     }
   }
 }
@@ -111,24 +126,13 @@ data "aws_iam_policy_document" "terraform_state_bucket" {
       identifiers = ["*"]
     }
   }
-
-  statement {
-    sid     = "AllowRootAccess"
-    actions = ["s3:*"]
-    effect  = "Allow"
-    resources = [
-      aws_s3_bucket.terraform_state_bucket.arn,
-      "${aws_s3_bucket.terraform_state_bucket.arn}/*",
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${local.aws_account_id}:root"]
-    }
-  }
 }
 
 resource "aws_s3_bucket_policy" "terraform_state_bucket" {
   bucket = aws_s3_bucket.terraform_state_bucket.id
   policy = data.aws_iam_policy_document.terraform_state_bucket.json
+
+  depends_on = [
+    aws_s3_bucket_public_access_block.terraform_state_bucket,
+  ]
 }
