@@ -9,4 +9,4 @@ permissions:
 
 jobs:
   terraform-docs:
-    uses: ulfiac/common-reusables/.github/workflows/reusable_terraform_docs.yaml@main
+    uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@main
