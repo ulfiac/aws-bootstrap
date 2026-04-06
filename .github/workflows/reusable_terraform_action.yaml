@@ -33,6 +33,7 @@ on:
         required: false
         type: choice
         options:
+          - aws_alpha
           - aws_mgmt
       terraform_action:
         default: plan
