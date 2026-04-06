@@ -1,10 +1,10 @@
 # aws-bootstrap
 
-Bootstraps a new AWS account with the foundational Terraform infrastructure required to manage the rest of the `ulfiac` estate. Specifically, it provisions:
+Bootstraps various AWS accounts with the foundational Terraform infrastructure required to manage them with IaC. Specifically, it provisions:
 
 - **GitHub Actions OIDC provider** — enables keyless authentication from GitHub Actions workflows
 - **OIDC IAM role** — grants `AdministratorAccess` and `Billing` to workflows in the `ulfiac/aws-bootstrap` and `ulfiac/infra` repositories
-- **Terraform state S3 buckets** — one bucket per region (`us-east-2`, `us-east-1`, `ca-central-1`) used as remote backends across the estate
+- **Terraform state S3 buckets** — one bucket per region (`us-east-2`, `us-east-1`, `ca-central-1`) used as remote backends by the terraform/terragrunt in the `ulfiac/infra` repository
 
 Because this module is itself the thing that creates the OIDC trust, it must be bootstrapped once using temporary root user access keys before it can use keyless auth thereafter.
 
@@ -67,6 +67,10 @@ Run the **deploy** workflow (`deploy.yaml`) from the GitHub Actions UI:
 
 Return to **Security credentials** in the AWS Console and delete the access key created in step 2. All future deployments use the OIDC role.
 
+### 6. Delete the environment secrets
+
+In the `aws-bootstrap` repository on GitHub, delete the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` secrets from the environment created in step 3.
+
 ## Repository Structure
 
 ```
@@ -77,7 +81,6 @@ terraform/
 ├── tf_state_buckets.tf      # Remote state S3 buckets (multi-region)
 ├── variables.tf             # Input variables
 └── modules/
-    ├── organization/        # AWS Organizations configuration
     └── tf_state_bucket/     # Reusable S3 state bucket module
 .github/workflows/
 ├── deploy.yaml              # Main dispatch workflow (plan / apply / destroy)
@@ -86,7 +89,7 @@ terraform/
 
 ## Contributing
 
-Open a pull request against `main`. The `linter` workflow runs automatically on the PR.
+Open a pull request against the `main` branch. The `linter` workflow runs automatically on the PR.
 
 ## License
 
