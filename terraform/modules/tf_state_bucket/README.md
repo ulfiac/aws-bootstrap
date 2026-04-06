@@ -2,7 +2,7 @@
 
 Terraform module to create s3 bucket to contain terraform state.
 
-# Usage Instructions
+## Usage Instructions
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
