@@ -2,7 +2,7 @@
 
 Terraform module to create aws organization.
 
-# Usage Instructions
+## Usage Instructions
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
