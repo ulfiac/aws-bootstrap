@@ -29,25 +29,55 @@ Complete the sign-up flow at [aws.amazon.com](https://aws.amazon.com):
 
 After sign-up you are logged into the AWS Console as the root user.
 
-### 2. Create a Temporary Root User Access Key
+### 2. Enable Cost Explorer
 
-> **Security note:** This key is used only to run the initial `apply`. Delete it immediately after step 5 below.
+You can enable Cost Explorer for your account by opening Cost Explorer for the first time in the AWS Cost Management console. You can't enable Cost Explorer using the API.
 
-1. Open the root user menu (top-right) → **Security credentials**
-2. Under **Access keys**, choose **Create access key**
-3. Copy the **Access Key ID** and **Secret Access Key**
+This must be done manually by the root user via the AWS Console. It cannot be done via the AWS CLI or API.
 
-### 3. Configure the GitHub Environment
+step-by-step:
+https://docs.aws.amazon.com/cost-management/latest/userguide/ce-enable.html
 
-In the `aws-bootstrap` repository on GitHub, create an environment that matches the `aws_environment` workflow input (e.g. `aws_mgmt`) and add:
+### 3. Grant access to the billing console
+
+IAM users and roles in an AWS account can't access the Billing and Cost Management console by default. This is true even if they have IAM policies that grant access to certain Billing features. To grant access, the AWS account root user must first activate IAM access.
+
+This must be done manually by the root user via the AWS Console. It cannot be done via the AWS CLI or API.
+
+step-by-step:
+https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started-account-iam.html
+
+reference:
+https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/control-access-billing.html
+https://repost.aws/knowledge-center/iam-billing-access
+
+### 4. Enable a virtual MFA device for the root user
+
+This should be done manually by the root user via the AWS Console.
+
+step-by-step:
+https://docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html
+
+### 5. Create an access key on the root user (temporary)
+
+> **Security note:** This key is used only to run the first terraform `apply`. Delete it immediately after the first terraform run completes successfully (once OIDC is properly configured).
+
+This should be done manually by the root user via the AWS Console.
+
+step-by-step:
+https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user_manage_add-key.html
+
+### 6. Create the GitHub Environment
+
+Create an environment in this GitHub repo in the format `aws_< account name >` (e.g. `aws_mgmt`), where <account_name> matches the account name chosen while creating the AWS account above.  Add the following Environment secrets and Environment variables:
 
 **Secrets**
 
 | Name | Value |
 |------|-------|
+| `AWS_ACCOUNT_ID` | 12-digit AWS account ID |
 | `AWS_ACCESS_KEY_ID` | Root user access key ID from step 2 |
 | `AWS_SECRET_ACCESS_KEY` | Root user secret access key from step 2 |
-| `AWS_ACCOUNT_ID` | 12-digit AWS account ID |
 
 **Variables**
 
@@ -55,7 +85,14 @@ In the `aws-bootstrap` repository on GitHub, create an environment that matches 
 |------|-------|
 | `OIDC_ROLE_TO_ASSUME` | Name to give the IAM role (e.g. `gha-oidc`) |
 
-### 4. Run the Deploy Workflow
+### 7. Add the new environment name to the GitHub Actions workflow inputs
+
+Edit the code for the workflows listed below.  Add the new environment name as an option on `workflow_dispatch` for the input variable named `aws_environment`.
+
+`deploy`
+`reusable_terraform_action`
+
+### 8. Run the Deploy Workflow
 
 Run the **deploy** workflow (`deploy.yaml`) from the GitHub Actions UI:
 
@@ -63,13 +100,13 @@ Run the **deploy** workflow (`deploy.yaml`) from the GitHub Actions UI:
 2. **Auth:** `keys` · **Action:** `apply` — apply the changes
 3. **Auth:** `oidc` · **Action:** `plan` — verify OIDC auth works (plan should show no changes)
 
-### 5. Delete the Root User Access Key
+### 9. Delete the access key on the Root User
 
-Return to **Security credentials** in the AWS Console and delete the access key created in step 2. All future deployments use the OIDC role.
+Return to **Security credentials** in the AWS Console and delete the root user access key created in step 5. All future deployments will use the OIDC role.
 
-### 6. Delete the environment secrets
+### 10. Delete the environment secrets
 
-In the `aws-bootstrap` repository on GitHub, delete the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` secrets from the environment created in step 3.
+Delete the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` secrets from the environment created in step 6.
 
 ## Repository Structure
 
