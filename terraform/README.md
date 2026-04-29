@@ -11,20 +11,20 @@ Terraform module to create AWS infrastructure components to support IaC automati
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | terraform | >= 1.14.1 |
 | aws | >= 6.24.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | aws | >= 6.24.0 |
 
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | tags | git::https://github.com/ulfiac/infra.git//terraform/modules/tags | main |
 | tf\_state\_bucket\_ca\_central\_1 | ./modules/tf_state_bucket | n/a |
 | tf\_state\_bucket\_us\_east\_1 | ./modules/tf_state_bucket | n/a |
@@ -33,7 +33,7 @@ Terraform module to create AWS infrastructure components to support IaC automati
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_iam_openid_connect_provider.oidc_gha](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
 | [aws_iam_role.oidc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachments_exclusive.oidc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachments_exclusive) | resource |
@@ -44,7 +44,7 @@ Terraform module to create AWS infrastructure components to support IaC automati
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | oidc\_role\_to\_assume | The name of the IAM role to be assumed by OIDC-auth'ed GitHub Actions. | `string` | n/a | yes |
 
 ## Outputs
