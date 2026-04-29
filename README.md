@@ -5,7 +5,7 @@ Bootstrap a new AWS account with the bare minimum required to enable IaC.  Speci
 1. enable GitHub Actions workflow authentication via OIDC
 2. create S3 buckets for remote terraform state used by other IaC repos
 
-## Key design decisions:
+## Key design decisions
 1. assume a brand new AWS account with nothing created/configured yet
 2. first execution will use temporary root user access keys to auth; subsequent executions will auth without keys via OIDC
 3. only do the bare minimum to accomplish the stated objectives above, nothing more
@@ -31,9 +31,9 @@ Bootstrap a new AWS account with the bare minimum required to enable IaC.  Speci
 - [edit the reusable_terraform_action workflow](https://github.com/ulfiac/aws-bootstrap/blob/main/.github/workflows/reusable_terraform_action.yaml#L31) - add the new environment name as an option on "workflow_dispatch" for the input named "aws_environment".
 
 ### Run the workflow
-- [run the deploy workflow](https://github.com/ulfiac/aws-bootstrap/actions/workflows/deploy.yaml) - **Auth:** `keys` · **Action:** `plan` — review the plan output
-- [run the deploy workflow](https://github.com/ulfiac/aws-bootstrap/actions/workflows/deploy.yaml) - **Auth:** `keys` · **Action:** `apply` — apply the changes
-- [run the deploy workflow](https://github.com/ulfiac/aws-bootstrap/actions/workflows/deploy.yaml) - **Auth:** `oidc` · **Action:** `plan` — verify OIDC auth works (plan should show no changes)
+- [run the deploy workflow (1st time)](https://github.com/ulfiac/aws-bootstrap/actions/workflows/deploy.yaml) - auth=keys; action=plan — review the plan output
+- [run the deploy workflow (2nd time)](https://github.com/ulfiac/aws-bootstrap/actions/workflows/deploy.yaml) - auth=keys; action=apply — apply the changes
+- [run the deploy workflow (3rd time)](https://github.com/ulfiac/aws-bootstrap/actions/workflows/deploy.yaml) - auth=oidc; action=plan — verify OIDC auth works and the plan shows no changes
 
 ### Manual clean-up
 - [delete the access key on the root user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user_manage_delete-key.html) - delete the access key created above on the root user.  All future deployments will use the OIDC authentication.
@@ -42,7 +42,7 @@ Bootstrap a new AWS account with the bare minimum required to enable IaC.  Speci
   - `AWS_SECRET_ACCESS_KEY` - root user secret access key from above
 
 ## Contributing
-Not accepting contributions at this time.
+Contributions are not being accepted at this time.
 
 ## License
 See [LICENSE](LICENSE).
