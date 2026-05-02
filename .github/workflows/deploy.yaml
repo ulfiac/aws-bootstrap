@@ -13,12 +13,13 @@ on:
         required: false
         type: choice
       aws_environment:
-        default: aws_mgmt
+        default: aws_green
         description: aws environment
         required: false
         type: choice
         options:
-          - aws_alpha
+          - aws_green
+          - aws_purple
           - aws_mgmt
       terraform_action:
         default: plan
