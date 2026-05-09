@@ -15,7 +15,7 @@ Bootstrap a new AWS account with the bare minimum required to enable IaC.  Speci
 ## Usage
 
 ### Manual initial setup
-- [create an aws account](https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-creating.html) - requires unique email, choose paid plan, can use same payment details.  Upon completion you're logged into the AWS Console as the root user.
+- [create an aws account](https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-creating.html) - requires unique email, choose paid account plan, can use same payment details.  Upon completion you're logged into the AWS Console as the root user.
 - [enable the cost explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-enable.html) - this must be done manually by the root user via the AWS Console. It cannot be done via the AWS CLI or API.
 - [grant access to the billing console](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started-account-iam.html) - IAM users and roles in an AWS account can't access the Billing and Cost Management console by default. This is true even if they have IAM policies that grant access to certain Billing features. To grant access, the AWS account root user must first activate IAM access. This must be done manually by the root user via the AWS Console. It cannot be done via the AWS CLI or API.
 - [enable a virtual MFA device on the root user](https://docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html) - this should be done manually by the root user via the AWS Console.
