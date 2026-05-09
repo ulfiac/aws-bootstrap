@@ -1,5 +1,5 @@
 name: deploy
-run-name: deploy - ${{ inputs.terraform_action }}
+run-name: deploy - ${{ inputs.terraform_action }} - ${{ inputs.aws_environment }} - ${{ inputs.auth }}
 
 on:
   workflow_dispatch:
