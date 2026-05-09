@@ -33,7 +33,7 @@ on:
         type: choice
       dump_context:
         default: false
-        description: dump context
+        description: dump github context
         required: false
         type: boolean
 
