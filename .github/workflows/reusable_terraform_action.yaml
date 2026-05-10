@@ -55,7 +55,7 @@ env:
   TF_LOG_CORE: OFF
   TF_LOG_PROVIDER: OFF
   TF_LOG_PATH: ./terraform.log
-  TF_VAR_oidc_role_to_assume: ${{ vars.OIDC_ROLE_TO_ASSUME }}
+  TF_VAR_oidc_role_to_assume: ${{ secrets.OIDC_ROLE_TO_ASSUME }}
 
 permissions:
   contents: read
@@ -92,7 +92,7 @@ jobs:
         if: ${{ inputs.auth == 'oidc' }}
         uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0, released 2026-02, checked 2026-03
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.OIDC_ROLE_TO_ASSUME }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-2
 
       - name: dump context (script)
@@ -115,7 +115,7 @@ jobs:
 
       - name: import bootstrap
         env:
-          OIDC_ROLE_TO_ASSUME: ${{ vars.OIDC_ROLE_TO_ASSUME }}
+          OIDC_ROLE_TO_ASSUME: ${{ secrets.OIDC_ROLE_TO_ASSUME }}
         run: ../scripts/import_bootstrap.sh
 
       - name: terraform plan
