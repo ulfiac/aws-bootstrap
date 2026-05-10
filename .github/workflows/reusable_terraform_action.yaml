@@ -12,7 +12,7 @@ on:
         default: aws_green
         required: false
         type: string
-      dump_context:
+      dump_github_context:
         default: false
         required: false
         type: boolean
@@ -45,7 +45,7 @@ on:
           - destroy
         required: true
         type: choice
-      dump_context:
+      dump_github_context:
         default: false
         required: false
         type: boolean
@@ -95,8 +95,8 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-2
 
-      - name: dump context (script)
-        if: ${{ inputs.dump_context }}
+      - name: dump github context (script)
+        if: ${{ inputs.dump_github_context }}
         env:
           CONTEXT_ENV: ${{ toJson(env) }}
           CONTEXT_GITHUB: ${{ toJson(github) }}
@@ -108,7 +108,7 @@ jobs:
           CONTEXT_STEPS: ${{ toJson(steps) }}
           CONTEXT_STRATEGY: ${{ toJson(strategy) }}
           CONTEXT_VARS: ${{ toJson(vars) }}
-        run: ${{ github.workspace }}/scripts/dump_context.sh
+        run: ${{ github.workspace }}/scripts/dump_github_context.sh
 
       - run: terraform init
       - run: terraform validate

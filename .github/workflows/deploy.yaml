@@ -31,7 +31,7 @@ on:
           - destroy
         required: true
         type: choice
-      dump_context:
+      dump_github_context:
         default: false
         description: dump github context
         required: false
@@ -68,7 +68,7 @@ jobs:
     uses: ./.github/workflows/reusable_terraform_action.yaml
     needs: set-plan-action
     with:
-      dump_context: ${{ inputs.dump_context }}
+      dump_github_context: ${{ inputs.dump_github_context }}
       auth: ${{ inputs.auth }}
       aws_environment: ${{ inputs.aws_environment }}
       terraform_action: ${{ needs.set-plan-action.outputs.plan_action }}
@@ -89,7 +89,7 @@ jobs:
     if: ${{ inputs.terraform_action == 'apply' || inputs.terraform_action == 'destroy' }}
     needs: get-approval
     with:
-      dump_context: ${{ inputs.dump_context }}
+      dump_github_context: ${{ inputs.dump_github_context }}
       auth: ${{ inputs.auth }}
       aws_environment: ${{ inputs.aws_environment }}
       terraform_action: ${{ inputs.terraform_action }}
