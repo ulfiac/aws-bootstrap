@@ -13,5 +13,3 @@ permissions:
 jobs:
   reusable-linter:
     uses: ulfiac/commons/.github/workflows/reusable_linter.yaml@main
-    with:
-      terraform-docs: true
