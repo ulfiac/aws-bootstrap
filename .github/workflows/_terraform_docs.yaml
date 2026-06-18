@@ -18,3 +18,5 @@ permissions:
 jobs:
   terraform-docs:
     uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@main
+    with:
+      find-dir: 'terraform'
