@@ -1,5 +1,5 @@
 name: _terraform-docs
-run-name: "terraform-docs: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.ref_name }}"
+run-name: "_terraform-docs: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.ref_name }}"
 
 on:
   pull_request:
