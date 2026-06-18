@@ -5,8 +5,6 @@ Terraform module to create AWS infrastructure components to support IaC automati
 - AWS OIDC provider and IAM role for GitHub Actions authentication
 - AWS S3 buckets in each of 3 regions to support Terraform/Terragrunt IaC automation
 
-## Usage Instructions
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -51,10 +49,6 @@ Terraform module to create AWS infrastructure components to support IaC automati
 
 No outputs.
 <!-- END_TF_DOCS -->
-
-## Contributing
-
-## License
 
 ## Updating This README
 
