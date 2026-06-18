@@ -39,7 +39,9 @@ No modules.
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| test\_terraform\_docs\_tf\_state\_bucket\_module | Whether to test the terraform-docs generation for the tf\_state\_bucket module. This is useful to ensure that the documentation is up-to-date and correctly generated. | `bool` | `true` | no |
 
 ## Outputs
 
