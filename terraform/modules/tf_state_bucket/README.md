@@ -39,7 +39,9 @@ No modules.
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| test | only a test | `string` | `"test"` | no |
 
 ## Outputs
 
