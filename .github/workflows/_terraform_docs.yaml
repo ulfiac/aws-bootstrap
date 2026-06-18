@@ -1,0 +1,20 @@
+name: _terraform-docs
+run-name: "reusable-terraform-docs: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.ref_name }}"
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'terraform/modules/**'
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  contents: write
+
+jobs:
+  terraform-docs:
+    uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@main
