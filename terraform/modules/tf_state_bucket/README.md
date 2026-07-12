@@ -7,7 +7,7 @@ Terraform module to create s3 bucket to contain terraform state.
 
 | Name | Version |
 |------|---------|
-| terraform | 1.15.6 |
+| terraform | 1.15.8 |
 | aws | 6.51.0 |
 
 ## Providers
