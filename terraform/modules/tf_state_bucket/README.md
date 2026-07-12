@@ -7,14 +7,14 @@ Terraform module to create s3 bucket to contain terraform state.
 
 | Name | Version |
 |------|---------|
-| terraform | >= 1.15.6 |
-| aws | >= 6.51.0 |
+| terraform | 1.15.6 |
+| aws | 6.51.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 6.51.0 |
+| aws | 6.51.0 |
 
 ## Modules
 
@@ -24,16 +24,16 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_s3_bucket.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket_lifecycle_configuration.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
-| [aws_s3_bucket_ownership_controls.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
-| [aws_s3_bucket_policy.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
-| [aws_s3_bucket_public_access_block.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_s3_bucket_server_side_encryption_configuration.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
-| [aws_s3_bucket_versioning.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) | resource |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [aws_s3_bucket.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_lifecycle_configuration.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/resources/s3_bucket_lifecycle_configuration) | resource |
+| [aws_s3_bucket_ownership_controls.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/resources/s3_bucket_ownership_controls) | resource |
+| [aws_s3_bucket_policy.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/resources/s3_bucket_policy) | resource |
+| [aws_s3_bucket_public_access_block.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_s3_bucket_server_side_encryption_configuration.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
+| [aws_s3_bucket_versioning.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/resources/s3_bucket_versioning) | resource |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.terraform_state_bucket](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/6.51.0/docs/data-sources/region) | data source |
 
 ## Inputs
 
