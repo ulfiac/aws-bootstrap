@@ -20,6 +20,6 @@ permissions:
 
 jobs:
   terraform-docs:
-    uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@main
+    uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@f59794cccc40cb197f7f0b5787f11a3de82bdf4f # v1.0.1
     with:
       find-dir: 'terraform'
