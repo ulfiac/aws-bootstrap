@@ -9,7 +9,7 @@ on:
         required: false
         type: string
       aws_environment:
-        default: aws_green
+        default: aws_mgmt
         required: false
         type: string
       dump_github_context:
@@ -29,12 +29,10 @@ on:
         required: false
         type: choice
       aws_environment:
-        default: aws_green
+        default: aws_mgmt
         required: false
         type: choice
         options:
-          - aws_green
-          - aws_purple
           - aws_mgmt
       terraform_action:
         default: plan
