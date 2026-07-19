@@ -12,4 +12,4 @@ permissions:
 
 jobs:
   reusable-linter:
-    uses: ulfiac/commons/.github/workflows/reusable_linter.yaml@5f7d2e10a21193bb50d8f3b4bd76c299f7b354bc # v1.0.5
+    uses: ulfiac/commons/.github/workflows/reusable_linter.yaml@2c1c948ece43a579519cdcc30a66653c05bbe767 # v1.0.7
