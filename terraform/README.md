@@ -11,13 +11,13 @@ Terraform module to create AWS infrastructure components to support IaC automati
 | Name | Version |
 |------|---------|
 | terraform | 1.15.8 |
-| aws | 6.55.0 |
+| aws | 6.56.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | 6.55.0 |
+| aws | 6.56.0 |
 
 ## Modules
 
@@ -32,12 +32,12 @@ Terraform module to create AWS infrastructure components to support IaC automati
 
 | Name | Type |
 |------|------|
-| [aws_iam_openid_connect_provider.oidc_gha](https://registry.terraform.io/providers/hashicorp/aws/6.55.0/docs/resources/iam_openid_connect_provider) | resource |
-| [aws_iam_role.oidc](https://registry.terraform.io/providers/hashicorp/aws/6.55.0/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy_attachments_exclusive.oidc](https://registry.terraform.io/providers/hashicorp/aws/6.55.0/docs/resources/iam_role_policy_attachments_exclusive) | resource |
-| [aws_iam_policy.admin_access](https://registry.terraform.io/providers/hashicorp/aws/6.55.0/docs/data-sources/iam_policy) | data source |
-| [aws_iam_policy.billing](https://registry.terraform.io/providers/hashicorp/aws/6.55.0/docs/data-sources/iam_policy) | data source |
-| [aws_iam_policy_document.assume_role_policy_oidc](https://registry.terraform.io/providers/hashicorp/aws/6.55.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_openid_connect_provider.oidc_gha](https://registry.terraform.io/providers/hashicorp/aws/6.56.0/docs/resources/iam_openid_connect_provider) | resource |
+| [aws_iam_role.oidc](https://registry.terraform.io/providers/hashicorp/aws/6.56.0/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachments_exclusive.oidc](https://registry.terraform.io/providers/hashicorp/aws/6.56.0/docs/resources/iam_role_policy_attachments_exclusive) | resource |
+| [aws_iam_policy.admin_access](https://registry.terraform.io/providers/hashicorp/aws/6.56.0/docs/data-sources/iam_policy) | data source |
+| [aws_iam_policy.billing](https://registry.terraform.io/providers/hashicorp/aws/6.56.0/docs/data-sources/iam_policy) | data source |
+| [aws_iam_policy_document.assume_role_policy_oidc](https://registry.terraform.io/providers/hashicorp/aws/6.56.0/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
