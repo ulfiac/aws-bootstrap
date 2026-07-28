@@ -20,6 +20,10 @@ permissions:
 
 jobs:
   terraform-docs:
-    uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@0336ce3c89db703a909ab32a1cb89f92b86d6620 # v1.0.10
+    # uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@0336ce3c89db703a909ab32a1cb89f92b86d6620 # v1.0.10
+    uses: ulfiac/commons/.github/workflows/reusable_terraform_docs.yaml@main
     with:
       find-dir: 'terraform'
+    secrets:
+      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
