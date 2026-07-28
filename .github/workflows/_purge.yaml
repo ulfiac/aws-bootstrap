@@ -11,4 +11,4 @@ permissions:
 
 jobs:
   purge-logs:
-    uses: ulfiac/commons/.github/workflows/reusable_purge_workflow_logs.yaml@0336ce3c89db703a909ab32a1cb89f92b86d6620 # v1.0.10
+    uses: ulfiac/commons/.github/workflows/reusable_purge_workflow_logs.yaml@f3a66f8ee6c59613141f1499d9ae6060a025ffbb # v1.0.11
