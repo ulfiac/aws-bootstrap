@@ -4,13 +4,27 @@
     "ulfiac"
   ],
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "mergeConfidence:all-badges"
   ],
   "labels": [
     "renovate"
   ],
+  "packageRules": [
+    {
+      "groupName": "Monday packages",
+      "matchPackageNames": [
+        "actions/checkout",
+        "aws-actions/configure-aws-credentials",
+        "hashicorp/aws",
+        "hashicorp/setup-terraform",
+        "hashicorp/terraform"
+      ]
+    }
+  ],
   "prHourlyLimit": 5,
   "reviewers": [
     "ulfiac"
-  ]
+  ],
+  "timezone": "America/New_York"
 }
