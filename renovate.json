@@ -19,6 +19,10 @@
         "hashicorp/aws",
         "hashicorp/setup-terraform",
         "hashicorp/terraform"
+      ],
+      "minimumReleaseAge": "7 days",
+      "schedule": [
+        "before 9am on monday"
       ]
     }
   ],
