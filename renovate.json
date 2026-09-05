@@ -27,8 +27,5 @@
     }
   ],
   "prHourlyLimit": 5,
-  "reviewers": [
-    "ulfiac"
-  ],
   "timezone": "America/New_York"
 }
