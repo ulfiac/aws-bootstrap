@@ -24,6 +24,13 @@
       "schedule": [
         "before 9am on monday"
       ]
+    },
+    {
+      "automerge": true,
+      "groupName": "commons packages",
+      "matchPackageNames": [
+        "ulfiac/commons"
+      ]
     }
   ],
   "prHourlyLimit": 5,
