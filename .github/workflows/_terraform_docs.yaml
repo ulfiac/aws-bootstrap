@@ -10,9 +10,7 @@ on:
       - '!terraform/**/README.md'
   workflow_dispatch: {}
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {}
 
 jobs:
   terraform-docs:
