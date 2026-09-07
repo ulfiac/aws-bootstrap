@@ -31,6 +31,13 @@
       "matchPackageNames": [
         "ulfiac/commons"
       ]
+    },
+    {
+      "automerge": true,
+      "groupName": "container packages",
+      "matchPackageNames": [
+        "ghcr.io/ulfiac/terragrunt-runner"
+      ]
     }
   ],
   "prHourlyLimit": 5,
