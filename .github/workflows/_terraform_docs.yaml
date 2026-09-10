@@ -18,5 +18,5 @@ jobs:
     with:
       find-dir: 'terraform'
     secrets:
-      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
-      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      APP_CLIENT_ID: ${{ secrets.TERRAFORM_DOCS_BOT_APP_CLIENT_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.TERRAFORM_DOCS_BOT_APP_PRIVATE_KEY }}
