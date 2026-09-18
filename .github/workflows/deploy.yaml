@@ -42,7 +42,7 @@ permissions:
 jobs:
   set-plan-action:
     name: set plan action
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       plan_action: ${{ steps.set-plan-action.outputs.plan_action }}
     steps:
@@ -74,7 +74,7 @@ jobs:
 
   get-approval:
     name: get approval
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ inputs.terraform_action == 'apply' || inputs.terraform_action == 'destroy' }}
     environment: approval_required
     needs: plan
