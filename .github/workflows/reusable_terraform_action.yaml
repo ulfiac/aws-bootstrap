@@ -62,7 +62,7 @@ permissions:
 jobs:
   terraform_action:
     name: "${{ inputs.terraform_action }}: ${{ inputs.aws_environment }}"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: ghcr.io/ulfiac/terragrunt-runner:1.1.5@sha256:cb0d478384d9e69a4e11c7df54167b82337da3ac563ea82cf2234525e2d1b398
     defaults:
