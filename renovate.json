@@ -10,6 +10,7 @@
   "packageRules": [
     {
       "groupName": "Monday packages",
+      "groupSingleUpdates": true,
       "matchPackageNames": [
         "actions/checkout",
         "aws-actions/configure-aws-credentials",
@@ -28,6 +29,7 @@
     {
       "automerge": true,
       "groupName": "commons packages",
+      "groupSingleUpdates": true,
       "matchPackageNames": [
         "ulfiac/commons"
       ]
@@ -35,6 +37,7 @@
     {
       "automerge": true,
       "groupName": "container packages",
+      "groupSingleUpdates": true,
       "matchPackageNames": [
         "ghcr.io/ulfiac/terragrunt-runner"
       ]
