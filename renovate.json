@@ -10,7 +10,7 @@
   ],
   "packageRules": [
     {
-      "groupName": "Monday packages",
+      "groupName": "Monday packages (1 of 4)",
       "groupSingleUpdates": true,
       "matchPackageNames": [
         "actions/checkout",
@@ -29,7 +29,7 @@
     },
     {
       "automerge": true,
-      "groupName": "commons packages",
+      "groupName": "reusables in commons repo (1 of 3)",
       "groupSingleUpdates": true,
       "matchPackageNames": [
         "ulfiac/commons"
@@ -37,7 +37,7 @@
     },
     {
       "automerge": true,
-      "groupName": "container packages",
+      "groupName": "container(s) in containers repo (1 of 3)",
       "groupSingleUpdates": true,
       "matchPackageNames": [
         "ghcr.io/ulfiac/terragrunt-runner"
