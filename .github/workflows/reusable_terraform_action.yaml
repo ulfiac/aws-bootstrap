@@ -64,7 +64,7 @@ jobs:
     name: "${{ inputs.terraform_action }}: ${{ inputs.aws_environment }}"
     runs-on: ubuntu-26.04
     container:
-      image: ghcr.io/ulfiac/terragrunt-runner:1.2.1@sha256:6fed2a65ee25d17fe6947a11a15725f4cd23e066a8846586fcd596da7b120a64
+      image: ghcr.io/ulfiac/terragrunt-runner:1.2.1@sha256:7eee692252b9013d8ae8de13b08f5295389aa8d859f928664cd5363e8bbd2a96
     defaults:
       run:
         shell: bash
